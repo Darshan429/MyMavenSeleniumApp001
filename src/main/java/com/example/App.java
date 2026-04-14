@@ -3,38 +3,32 @@ package com.example;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
 public class App {
-    public static void main(String[] args) throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
-        // Open Products Page
-        driver.get("https://automationexercise.com/products");
-        // Maximize Browser Window
-        driver.manage().window().maximize();
-        // Add Product 4 to Cart
-        driver.findElement(By.cssSelector("[data-product-id='4']")).click();
-        Thread.sleep(2000);
-        driver.findElement(By.cssSelector(".btn.btn-success.close-modal.btn-block")).click();
+    public static void main(String[] args) {
 
-        // Add Product 5 to Cart
-        driver.findElement(By.cssSelector("[data-product-id='5']")).click();
-        Thread.sleep(2000);
-        driver.findElement(By.cssSelector(".btn.btn-success.close-modal.btn-block")).click();
+        ChromeOptions options = new ChromeOptions();
 
-        // Add Product 6 to Cart
-        driver.findElement(By.cssSelector("[data-product-id='6']")).click();
-        Thread.sleep(2000);
-        driver.findElement(By.cssSelector(".btn.btn-success.close-modal.btn-block")).click();
+        // Read system property
+        String headless = System.getProperty("headless");
 
-        // Open Cart Page
-        driver.get("https://automationexercise.com/view_cart");
+        if ("true".equals(headless)) {
+            options.addArguments("--headless=new");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+        }
 
-        // Refresh Cart Page
-        driver.navigate().refresh();
+        WebDriver driver = new ChromeDriver(options);
 
-        // Wait for 10 seconds
-        Thread.sleep(10000);
+        driver.get("https://www.saucedemo.com/");
+        
+        driver.findElement(By.id("user-name")).sendKeys("standard_user");
+        driver.findElement(By.id("password")).sendKeys("secret_sauce");
+        driver.findElement(By.id("login-button")).click();
 
-        // Close Browser
+        System.out.println("Title: " + driver.getTitle());
+
         driver.quit();
     }
 }
